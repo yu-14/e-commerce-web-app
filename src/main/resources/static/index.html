@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Commerce Products</title>
+    <title>E-Commerce Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -14,79 +14,155 @@
 </head>
 <body class="bg-gray-100">
 
-    <div class="container mx-auto px-4 py-8">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-800">Explore Our Products</h1>
-            <p class="text-gray-600">The finest selection of products, just for you.</p>
-        </header>
+    <div class="flex">
+        <!-- Sidebar for Departments -->
+        <aside class="w-64 bg-white h-screen sticky top-0 p-6 shadow-lg">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Departments</h2>
+            <nav id="department-list" class="space-y-2">
+                <!-- Department links will be inserted here -->
+                <div class="text-center py-4">
+                    <svg class="animate-spin h-6 w-6 text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+            </nav>
+        </aside>
 
-        <!-- Loading Spinner -->
-        <div id="loader" class="text-center py-10">
-            <svg class="animate-spin h-10 w-10 text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <p class="mt-2 text-gray-600">Loading Products...</p>
-        </div>
-        
-        <!-- Error Message -->
-        <div id="error-message" class="hidden text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
-            <strong class="font-bold">Error!</strong>
-            <span class="block sm:inline">Could not connect to the API. Please ensure the backend is running.</span>
-        </div>
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <header id="page-header" class="text-center mb-8">
+                <!-- Header content changes based on view -->
+            </header>
 
-        <!-- Products Grid -->
-        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Product cards will be inserted here by JavaScript -->
-        </div>
+            <!-- Loading Spinner -->
+            <div id="loader" class="text-center py-10">
+                <svg class="animate-spin h-10 w-10 text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="mt-2 text-gray-600">Loading Products...</p>
+            </div>
+            
+            <!-- Error Message -->
+            <div id="error-message" class="hidden text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg" role="alert"></div>
 
+            <!-- Products Grid -->
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Product cards will be inserted here -->
+            </div>
+        </main>
     </div>
 
     <!-- Product Detail Modal -->
-    <div id="product-detail-modal" class="modal fixed inset-0 bg-gray-800 bg-opacity-75 items-center justify-center p-4">
+    <div id="product-detail-modal" class="modal fixed inset-0 bg-gray-800 bg-opacity-75 items-center justify-center p-4 z-50">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-full overflow-y-auto">
-            <div class="p-6" id="modal-content">
-                <!-- Modal content will be inserted here -->
-            </div>
+            <div class="p-6" id="modal-content"></div>
             <div class="bg-gray-100 px-6 py-3 text-right">
-                <button onclick="closeModal()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Close</button>
+                <button onclick="closeModal()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Close</button>
             </div>
         </div>
     </div>
 
     <script>
-        const API_BASE_URL = 'http://localhost:8081/api/products';
+        const API_BASE_URL = 'http://localhost:8081/api';
         const productsGrid = document.getElementById('products-grid');
         const loader = document.getElementById('loader');
         const errorMessage = document.getElementById('error-message');
         const modal = document.getElementById('product-detail-modal');
         const modalContent = document.getElementById('modal-content');
+        const departmentList = document.getElementById('department-list');
+        const pageHeader = document.getElementById('page-header');
 
-        document.addEventListener('DOMContentLoaded', fetchProducts);
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchDepartments();
+            router(); // Initial route handling on page load
+        });
+        window.addEventListener('hashchange', router);
 
-        async function fetchProducts() {
-            try {
-                const response = await fetch(`${API_BASE_URL}?page=0&size=20`); // Fetch first 20 products
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                const data = await response.json();
-                displayProducts(data.content);
-            } catch (error) {
-                console.error('Failed to fetch products:', error);
-                loader.style.display = 'none';
-                errorMessage.classList.remove('hidden');
+        // --- Routing ---
+        function router() {
+            const hash = window.location.hash;
+            if (hash.startsWith('#/department/')) {
+                const departmentId = hash.split('/')[2];
+                fetchProductsByDepartment(departmentId);
+            } else {
+                fetchAllProducts();
             }
         }
 
+        // --- Data Fetching ---
+        async function fetchDepartments() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/departments`);
+                if (!response.ok) throw new Error('Could not fetch departments.');
+                const data = await response.json();
+                displayDepartments(data.departments);
+            } catch (error) {
+                departmentList.innerHTML = `<p class="text-red-500">${error.message}</p>`;
+            }
+        }
+
+        async function fetchAllProducts() {
+            updateHeader('All Products', 'The finest selection, just for you.');
+            await fetchAndDisplayProducts(`${API_BASE_URL}/products?page=0&size=50`);
+        }
+
+        async function fetchProductsByDepartment(id) {
+            await fetchAndDisplayProducts(`${API_BASE_URL}/departments/${id}/products`);
+        }
+        
+        async function fetchAndDisplayProducts(url) {
+            showLoader(true);
+            errorMessage.classList.add('hidden');
+            productsGrid.innerHTML = '';
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+                
+                const data = await response.json();
+                
+                if (data.department) { // Department-specific view
+                    updateHeader(data.department, `${data.products.length} products found.`);
+                    displayProducts(data.products);
+                } else { // All products view
+                    displayProducts(data.content);
+                }
+
+            } catch (error) {
+                showError(`Could not load products. Please ensure the backend API is running. (${error.message})`);
+            } finally {
+                showLoader(false);
+            }
+        }
+
+        // --- UI Rendering ---
+        function displayDepartments(departments) {
+            departmentList.innerHTML = `
+                <a href="#" class="block font-semibold text-blue-600 hover:underline">All Products</a>
+            `; // Add "All Products" link
+            departments.forEach(dept => {
+                const link = document.createElement('a');
+                link.href = `#/department/${dept.id}`;
+                link.className = 'block text-gray-700 hover:text-blue-600 hover:underline';
+                link.innerHTML = `${dept.name} <span class="text-xs text-gray-500">(${dept.productCount})</span>`;
+                departmentList.appendChild(link);
+            });
+        }
+        
         function displayProducts(products) {
-            loader.style.display = 'none';
-            productsGrid.innerHTML = ''; // Clear existing grid
+            if (products.length === 0) {
+                showError("No products found in this department.");
+                return;
+            }
+
             products.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-lg shadow-md overflow-hidden transform hover:-translate-y-1 transition-transform duration-300 cursor-pointer';
                 card.onclick = () => fetchProductDetails(product.id);
                 
-                // ** UPDATED PLACEHOLDER URL **
                 const placeholderImageUrl = `https://placehold.co/600x400/4A5568/FFFFFF?text=${encodeURIComponent(product.category)}`;
 
                 card.innerHTML = `
@@ -100,22 +176,36 @@
                 productsGrid.appendChild(card);
             });
         }
+        
+        function updateHeader(title, subtitle) {
+            pageHeader.innerHTML = `
+                <h1 class="text-4xl font-bold text-gray-800">${title}</h1>
+                <p class="text-gray-600">${subtitle}</p>
+            `;
+        }
 
+        function showLoader(isLoading) {
+            loader.style.display = isLoading ? 'block' : 'none';
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden');
+        }
+
+        // --- Modal Logic (reused from previous milestone) ---
         async function fetchProductDetails(id) {
             try {
-                const response = await fetch(`${API_BASE_URL}/${id}`);
+                const response = await fetch(`${API_BASE_URL}/products/${id}`);
                 if (!response.ok) throw new Error('Product not found');
-                
                 const product = await response.json();
                 displayProductDetails(product);
             } catch (error) {
-                console.error('Failed to fetch product details:', error);
                 alert('Could not load product details.');
             }
         }
 
         function displayProductDetails(product) {
-            // ** UPDATED PLACEHOLDER URL **
             const placeholderImageUrl = `https://placehold.co/800x600/4A5568/FFFFFF?text=${encodeURIComponent(product.category)}`;
             modalContent.innerHTML = `
                 <div class="flex flex-col md:flex-row gap-6">
@@ -130,10 +220,8 @@
                             <h4 class="text-lg font-semibold">Details</h4>
                             <ul class="mt-2 text-gray-700 space-y-2">
                                 <li><span class="font-semibold">Category:</span> ${product.category}</li>
-                                <li><span class="font-semibold">Department:</span> ${product.department}</li>
+                                <li><span class="font-semibold">Department:</span> ${product.department.name}</li>
                                 <li><span class="font-semibold">SKU:</span> ${product.sku}</li>
-                                <li><span class="font-semibold">Cost:</span> $${product.cost.toFixed(2)}</li>
-                                <li><span class="font-semibold">Distribution Center ID:</span> ${product.distributionCenterId}</li>
                             </ul>
                         </div>
                     </div>
