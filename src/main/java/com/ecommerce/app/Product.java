@@ -2,9 +2,12 @@ package com.ecommerce.app;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 
@@ -14,10 +17,10 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Internal DB primary key
+    private Long id;
 
     @Column(name = "csv_id", nullable = false)
-    private Integer csvId; // The 'id' column from the CSV
+    private Integer csvId;
 
     @Column(name = "cost", precision = 10, scale = 2)
     private BigDecimal cost;
@@ -34,8 +37,11 @@ public class Product {
     @Column(name = "retail_price", precision = 10, scale = 2)
     private BigDecimal retailPrice;
 
-    @Column(name = "department", length = 255)
-    private String department;
+    // The 'department' String is now replaced with a relationship
+    // to the Department entity.
+    @ManyToOne(fetch = FetchType.LAZY) // LAZY is efficient
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 
     @Column(name = "sku", unique = true, nullable = false)
     private String sku;
@@ -104,11 +110,11 @@ public class Product {
         this.retailPrice = retailPrice;
     }
 
-    public String getDepartment() {
+    public Department getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
+    public void setDepartment(Department department) {
         this.department = department;
     }
 
